@@ -7,7 +7,7 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 15px;
-  padding-bottom: 2.25rem;
+  padding-bottom: 6rem;
 `;
 
 function Home() {
