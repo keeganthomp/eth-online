@@ -2,9 +2,7 @@
 import { Web3Storage, CIDString } from 'web3.storage';
 import { Message } from 'types';
 
-const API_TOK =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGI2MzMyNTc2ZmRhOWE2NkM5MUREMDYwNTcwMEZGNDI0YWE0NzU4YTkiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjI4NDkyMzk0MTAsIm5hbWUiOiJldGgtb25saW5lIn0.bWpseqLrJmElwEy-whPS2ukHTRGOdopFVnywdXIiHBE';
-
+const API_TOK = process.env.REACT_APP_WEB3_STORAGE_KEY as string;
 const storage = new Web3Storage({ token: API_TOK });
 
 const FILE_NAME = 'metadata.json';
