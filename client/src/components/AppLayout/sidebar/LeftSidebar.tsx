@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import Sidebar from './sidebar.component';
 
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 1rem;
-`;
 const PurchaseTokensContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -21,9 +14,6 @@ const PurchaseButton = styled.button`
 const LeftSidebar = () => {
   return (
     <Sidebar gridArea='leftSidebar'>
-      <LogoContainer>
-        <p>Ixnay</p>
-      </LogoContainer>
       <PurchaseTokensContainer>
         <PurchaseButton>Purchase Invite Token</PurchaseButton>
         <PurchaseButton>Purchase Like Tokens</PurchaseButton>

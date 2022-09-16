@@ -5,6 +5,15 @@ import { useRecoilValue } from 'recoil';
 
 const TopBarContainer = styled.div`
   grid-area: topBar;
+  display: grid;
+  grid-template-columns: 22rem 1fr 22rem;
+`;
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1rem;
 `;
 const WalletContainer = styled.div`
   display: flex;
@@ -28,6 +37,9 @@ const TopBar = () => {
   const account = useRecoilValue(accountState);
   return (
     <TopBarContainer>
+      <LogoContainer>
+        <p>Ixnay</p>
+      </LogoContainer>
       <WalletContainer>
         <ConnectButton />
         {account && (
@@ -38,6 +50,7 @@ const TopBar = () => {
           </BalanceContainer>
         )}
       </WalletContainer>
+      <div />
     </TopBarContainer>
   );
 };
