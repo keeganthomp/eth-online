@@ -5,8 +5,8 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5rem;
   width: 100%;
+  margin-bottom: 1rem;
 `;
 const PurchaseTokensContainer = styled.div`
   display: grid;

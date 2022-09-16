@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Outlet } from 'react-router-dom';
-import LeftSidebar from 'components/sidebar/LeftSidebar';
-import RightSidebar from 'components/sidebar/RightSidebar';
+import LeftSidebar from 'components/AppLayout/sidebar/LeftSidebar';
+import RightSidebar from 'components/AppLayout/sidebar/RightSidebar';
+import TopBar from './TopBar';
 
 const NAVBAR_HEIGHT = '5rem';
 const SIDEBAR_WIDTH = '22rem';
@@ -12,7 +13,9 @@ const Layout = styled.div`
   display: grid;
   grid-template-rows: ${NAVBAR_HEIGHT} 1fr; // navbar height
   grid-template-columns: ${SIDEBAR_WIDTH} 1fr ${SIDEBAR_WIDTH}; // sidebar width
-  grid-template-areas: 'leftSidebar content rightSidebar';
+  grid-template-areas:
+    'topBar topBar topBar'
+    'leftSidebar content rightSidebar';
 `;
 const Content = styled.div`
   grid-area: content;
@@ -26,6 +29,7 @@ const Content = styled.div`
 const AppLayout = () => {
   return (
     <Layout>
+      <TopBar />
       <LeftSidebar />
       <Content>
         <Outlet />
