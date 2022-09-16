@@ -24,6 +24,7 @@ const Content = styled.div`
   height: 100vh;
   overflow: auto;
   background-color: #eeeeee;
+  border-radius: 5px;
 `;
 
 const AppLayout = () => {
