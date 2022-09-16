@@ -3,3 +3,4 @@ reach
 build
 node_modules
 .reach
+.env

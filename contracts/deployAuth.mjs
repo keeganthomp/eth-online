@@ -4,15 +4,11 @@ import * as authBAckend from './build/auth.main.mjs';
 const POLYGON_TESTNET = 'https://rpc.ankr.com/polygon_mumbai';
 const POLYGON_MAINNET = 'https://rpc-mainnet.matic.quiknode.pro';
 
-// REMOVE BEFORE COMMIT
-const SECRET = '';
-
 const getAccFromSecret = async (
   message = 'Please paste the secret of the deployer:'
 ) => {
-  //   const secret = await ask.ask(message);
-  //   const fmtSecret = secret.replace(/,/g, '');
-  const acc = await stdlib.newAccountFromSecret(SECRET);
+  const secret = await ask.ask(message);
+  const acc = await stdlib.newAccountFromSecret(secret);
   return acc;
 };
 
