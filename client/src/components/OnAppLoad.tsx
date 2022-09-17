@@ -1,16 +1,15 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 import postState from 'state/post';
+import tokenState from 'state/tokens';
 import { useSetRecoilState } from 'recoil';
 import web3Storage, { getMessageMetadata } from 'lib/web3Storage';
 import { useEffect } from 'react';
 import { Message } from 'types';
 import reach from 'lib/reach';
-import accountState from 'state/account';
 
 const OnAppLoad = () => {
   const setPosts = useSetRecoilState(postState);
-  const setAccount = useSetRecoilState(accountState);
+  const setTokenIds = useSetRecoilState(tokenState);
 
   const getMessages = async () => {
     setPosts(({ posts: currPosts }) => ({
@@ -44,16 +43,14 @@ const OnAppLoad = () => {
     }
   };
 
-  const checkForCachedAccount = async () => {
-    const accountFromCache = await reach.getAccountFromCache();
-    if (accountFromCache) {
-      setAccount(accountFromCache);
-    }
+  const getTokIds = async () => {
+    const toks = await reach.getTokenIds();
+    setTokenIds(toks);
   };
 
   useEffect(() => {
     getMessages();
-    // checkForCachedAccount();
+    getTokIds();
   }, []);
 
   return null;

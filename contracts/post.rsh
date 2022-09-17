@@ -1,6 +1,9 @@
 'reach 0.1';
 'use strict';
 
+const DEFAULT_LIKE_AMT = 1;
+const REQUIRED_INVITE_TOKEN_AMT = 1;
+
 export const main = Reach.App(() => {
   setOptions({ connectors: [ETH] });
 
@@ -10,7 +13,10 @@ export const main = Reach.App(() => {
     ready: Fun([], Null),
   });
   const api = API({
-    like: Fun([UInt], Null),
+    like: Fun([], Null),
+  });
+  const view = View({
+    likesReceived: UInt,
   });
   init();
 
@@ -25,19 +31,22 @@ export const main = Reach.App(() => {
   C.interact.ready();
 
   const [totalReceived] = parallelReduce([0])
+    .define(() => {
+      view.likesReceived.set(totalReceived);
+    })
     .invariant(balance() == 0)
     .while(true)
-    .api_(api.like, amt => {
+    .api_(api.like, () => {
       return [
         [
-          [amt, likeToken],
-          [1, partTok],
+          [DEFAULT_LIKE_AMT, likeToken],
+          [REQUIRED_INVITE_TOKEN_AMT, partTok],
         ],
         k => {
-          transfer(1, partTok).to(this);
-          transfer(amt, likeToken).to(C);
+          transfer(REQUIRED_INVITE_TOKEN_AMT, partTok).to(this);
+          transfer(DEFAULT_LIKE_AMT, likeToken).to(C);
           k(null);
-          return [totalReceived + amt];
+          return [totalReceived + DEFAULT_LIKE_AMT];
         },
       ];
     });

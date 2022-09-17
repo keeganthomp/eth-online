@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import ConnectButton from 'components/ConnectButton';
 import accountState from 'state/account';
+import tokenState from 'state/tokens';
+import tokenBalancesState from 'state/tokenBalances';
 import { useRecoilValue } from 'recoil';
 
 const TopBarContainer = styled.div`
@@ -32,9 +34,14 @@ const Balance = styled.p`
 const BalAmount = styled.span`
   font-weight: bold;
 `;
+const TokIdContainer = styled.div`
+  font-size: 12px;
+`;
 
 const TopBar = () => {
   const account = useRecoilValue(accountState);
+  const tokenIds = useRecoilValue(tokenState);
+  const { likeTokenBalance } = useRecoilValue(tokenBalancesState);
   return (
     <TopBarContainer>
       <LogoContainer>
@@ -45,12 +52,15 @@ const TopBar = () => {
         {account && (
           <BalanceContainer>
             <Balance>
-              Like tokens: <BalAmount>34</BalAmount>
+              Like tokens: <BalAmount>{likeTokenBalance}</BalAmount>
             </Balance>
           </BalanceContainer>
         )}
       </WalletContainer>
-      <div />
+      <TokIdContainer>
+        <p>Invite Token Id: {tokenIds.inviteTokenId}</p>
+        <p>Like Token Id: {tokenIds.likeTokenId}</p>
+      </TokIdContainer>
     </TopBarContainer>
   );
 };

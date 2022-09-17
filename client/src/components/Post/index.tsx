@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { HiOutlineHeart } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { Message } from 'types';
-import { POLYGON_TESTNET_EXPLORER_BASE_URL } from 'lib/reach';
+import reach, { POLYGON_TESTNET_EXPLORER_BASE_URL } from 'lib/reach';
+import accountState from 'state/account';
+import { useRecoilValue } from 'recoil';
 
 const CARD_HEIGHT = '15rem';
 const ICON_SIZE = 25;
@@ -37,23 +39,39 @@ const Content = styled.div`
   padding: 10px;
 `;
 
-const Actions = styled.div`
+const HeartIcon = styled(HiOutlineHeart)``;
+
+const LikeContainer = styled.div`
   border-top: 1px solid lightgray;
   display: flex;
   align-items: center;
+  justify-content: center;
   > * {
     margin: 0 10px;
     cursor: pointer;
   }
+  &:hover {
+    background-color: red;
+    cursor: pointer;
+    ${HeartIcon} {
+      color: white;
+    }
+  }
 `;
 
 const Post = ({ sender, message, contractAddress, id }: Message) => {
+  const account = useRecoilValue(accountState);
   const navigate = useNavigate();
 
   const goViewPost = () => navigate(`/post/${id}`);
 
   const goViewContract = () =>
     window.open(`${POLYGON_TESTNET_EXPLORER_BASE_URL}${contractAddress}`, '_blank');
+
+  const likePost = () => {
+    if (!account) return;
+    reach.likePost(account, contractAddress);
+  };
 
   return (
     <Container>
@@ -67,9 +85,9 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
           contract: <ContractLink onClick={goViewContract}>{contractAddress}</ContractLink>
         </p>
       </Content>
-      <Actions>
-        <HiOutlineHeart size={ICON_SIZE} />
-      </Actions>
+      <LikeContainer onClick={likePost}>
+        <HeartIcon size={ICON_SIZE} />
+      </LikeContainer>
     </Container>
   );
 };

@@ -7,7 +7,7 @@ const MAX_INITIAL_INVITES = 1000;
 const LIKE_BUNDLE_AMT = 100;
 
 const INVITE_TOK_COST = 4;
-const LIKE_TOK_COST = 1;
+const LIKE_BUNDLE_COST = 1;
 
 export const main = Reach.App(() => {
   setOptions({ connectors: [ETH] });
@@ -23,6 +23,9 @@ export const main = Reach.App(() => {
   const view = View({
     inviteToken: Token,
     likeToken: Token,
+    areFreeInvitesAvailable: Bool,
+    inviteToksDistrbuted: UInt,
+    likeToksDistributed: UInt,
     isUser: Fun([Address], Bool),
   });
 
@@ -50,10 +53,16 @@ export const main = Reach.App(() => {
   view.inviteToken.set(inviteToken);
   view.likeToken.set(likeToken);
   view.isUser.set(u => Users.member(u));
+  view.areFreeInvitesAvailable.set(true);
 
-  const [invites, likeToksPurchased] = parallelReduce([0, 0])
+  const [invites, likeToks, inviteTokBuys, likeBundleBuys] = parallelReduce([
+    0, 0, 0, 0,
+  ])
     .define(() => {
       //views here
+      view.inviteToksDistrbuted.set(invites);
+      view.likeToksDistributed.set(likeToks);
+      view.areFreeInvitesAvailable.set(invites < MAX_INITIAL_INVITES);
       const checkUsrAlreadyExist = who => {
         check(
           !Users.member(who),
@@ -74,15 +83,13 @@ export const main = Reach.App(() => {
         chkCtcLikeTokBal();
       };
       const balanceChk = () => {
-        const userCountAfterInitial = Users.Map.size() - MAX_INITIAL_INVITES;
         const isBeyondInitialInvites = invites > MAX_INITIAL_INVITES;
-        const balFromInvites = userCountAfterInitial * INVITE_TOK_COST;
-        const balFromLikeToks =
-          (likeToksPurchased / LIKE_BUNDLE_AMT) * LIKE_TOK_COST;
+        const balFromLikeToks = likeBundleBuys * LIKE_BUNDLE_COST;
         if (isBeyondInitialInvites) {
+          const balFromInvites = inviteTokBuys * INVITE_TOK_COST;
           return balance() === balFromInvites + balFromLikeToks;
         } else {
-          return balance() === 0;
+          return balance() === balFromLikeToks;
         }
       };
     })
@@ -100,43 +107,51 @@ export const main = Reach.App(() => {
           transfer(REQUIRED_INVITE_TOK_AMT, inviteToken).to(this);
           transfer(LIKE_BUNDLE_AMT, likeToken).to(this);
           k(null);
-          return [invites + REQUIRED_INVITE_TOK_AMT, likeToksPurchased];
+          return [
+            invites + 1,
+            likeToks + LIKE_BUNDLE_AMT,
+            inviteTokBuys,
+            likeBundleBuys,
+          ];
         },
       ];
     })
     .api_(api.buyInviteTok, () => {
-      const likeAmtToGive = LIKE_BUNDLE_AMT / 3;
       checkUsrAlreadyExist(this);
       chkCtcInviteTokBal();
-      check(balance(likeToken) >= likeAmtToGive, 'not enough like tokens');
       check(
         invites > MAX_INITIAL_INVITES,
-        'you can still get FREE invite and like tokens!'
+        'you can still get a FREE invite token!'
       );
       return [
         [INVITE_TOK_COST, [0, inviteToken]],
         k => {
           transfer(REQUIRED_INVITE_TOK_AMT, inviteToken).to(this);
-          transfer(likeAmtToGive, likeToken).to(this);
           Users.insert(this);
           k(null);
-          return [invites, likeToksPurchased];
+          return [
+            invites + REQUIRED_INVITE_TOK_AMT,
+            likeToks,
+            inviteTokBuys + 1,
+            likeBundleBuys,
+          ];
         },
       ];
     })
     .api_(api.buyLikeTok, () => {
-      check(balance(likeToken) >= LIKE_BUNDLE_AMT, 'not enough like tokens');
-      check(
-        invites > MAX_INITIAL_INVITES,
-        'you can still get FREE invite and like tokens!'
-      );
+      chkCtcLikeTokBal();
       return [
-        [LIKE_TOK_COST, [1, inviteToken]],
+        [LIKE_BUNDLE_COST, [REQUIRED_INVITE_TOK_AMT, inviteToken]],
         k => {
-          transfer(1, inviteToken).to(this);
+          transfer(REQUIRED_INVITE_TOK_AMT, inviteToken).to(this);
           transfer(LIKE_BUNDLE_AMT, likeToken).to(this);
           k(null);
-          return [invites, likeToksPurchased + LIKE_BUNDLE_AMT];
+          return [
+            invites,
+            likeToks + LIKE_BUNDLE_AMT,
+            inviteTokBuys,
+            likeBundleBuys + 1,
+          ];
         },
       ];
     });

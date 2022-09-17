@@ -1,4 +1,8 @@
 import styled from 'styled-components';
+import reach from 'lib/reach';
+import accountState from 'state/account';
+import { useRecoilValue } from 'recoil';
+
 import Sidebar from './sidebar.component';
 
 const PurchaseTokensContainer = styled.div`
@@ -12,11 +16,23 @@ const PurchaseButton = styled.button`
 `;
 
 const LeftSidebar = () => {
+  const account = useRecoilValue(accountState);
+
+  const handleGetInviteToken = () => {
+    if (!account) return;
+    reach.getInviteToken(account);
+  };
+
+  const handleGetLikeTokens = () => {
+    if (!account) return;
+    reach.getLikeTokens(account);
+  };
+
   return (
     <Sidebar gridArea='leftSidebar'>
       <PurchaseTokensContainer>
-        <PurchaseButton>Purchase Invite Token</PurchaseButton>
-        <PurchaseButton>Purchase Like Tokens</PurchaseButton>
+        <PurchaseButton onClick={handleGetInviteToken}>Purchase Invite Token</PurchaseButton>
+        <PurchaseButton onClick={handleGetLikeTokens}>Purchase Like Tokens</PurchaseButton>
       </PurchaseTokensContainer>
     </Sidebar>
   );
