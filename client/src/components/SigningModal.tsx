@@ -49,6 +49,7 @@ const SigningModal = () => {
           <Image src={signingImage} alt='signing-image' />
         </ImageWrapper>
         <Message>This will go away when all reqired signings are complete</Message>
+        <Message>or if you reject the signing(s).</Message>
       </Container>
     </ReactModal>
   );
