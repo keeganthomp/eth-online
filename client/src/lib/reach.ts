@@ -27,6 +27,13 @@ export const getTokenIds = async (): Promise<{ inviteTokenId: string; likeTokenI
   };
 };
 
+export const getPostLikes = async (ctcAddress: string) => {
+  const acc = await createViewAccount();
+  const ctc = acc.contract(postBackend, ctcAddress);
+  const [_, totLikes] = await ctc.v.likesReceived();
+  return reach.bigNumberToNumber(totLikes);
+};
+
 export const launchPostCtc = async (acc: any) => {
   try {
     const { inviteTokenId, likeTokenId } = await getTokenIds();
@@ -134,7 +141,8 @@ const obj = {
   getLikeTokens,
   getTokBalances,
   formatAccount,
-  likePost
+  likePost,
+  getPostLikes
 };
 
 export default obj;

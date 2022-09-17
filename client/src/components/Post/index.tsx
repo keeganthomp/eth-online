@@ -8,6 +8,7 @@ import accountState from 'state/account';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Link from 'components/Link';
 import signingState from 'state/signing';
+import { useEffect, useState } from 'react';
 
 const CARD_HEIGHT = '15rem';
 const ICON_SIZE = 25;
@@ -45,6 +46,10 @@ const ContractInfo = styled.p`
   top: 3px;
   right: 6px;
 `;
+const LikeCount = styled.p`
+  position: absolute;
+  right: 0;
+`;
 
 const LikeContainer = styled.div`
   background-color: ${(props) => props.theme.red};
@@ -69,17 +74,31 @@ const LikeContainer = styled.div`
 `;
 
 const Post = ({ sender, message, contractAddress, id }: Message) => {
+  const [fetchingLikes, setFetching] = useState(false);
+  const [likes, setLikes] = useState<null | number>(null);
   const account = useRecoilValue(accountState);
   const setSigning = useSetRecoilState(signingState);
   const navigate = useNavigate();
 
   const goViewPost = () => navigate(`/post/${id}`);
 
+  const asyncFetchLikes = async () => {
+    setFetching(true);
+    const likesFromCtc = await reach.getPostLikes(contractAddress);
+    setLikes(likesFromCtc);
+    setFetching(false);
+  };
+
+  useEffect(() => {
+    asyncFetchLikes();
+  }, []);
+
   const likePost = async () => {
     if (!account) return;
     try {
       setSigning(true);
       await reach.likePost(account, contractAddress);
+      if (likes) setLikes(likes + 1);
     } catch {
       setSigning(false);
     }
@@ -99,6 +118,7 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
       <Content>{message}</Content>
       <LikeContainer onClick={likePost}>
         <HeartIcon size={ICON_SIZE} />
+        <LikeCount>{likes}</LikeCount>
       </LikeContainer>
     </Container>
   );
