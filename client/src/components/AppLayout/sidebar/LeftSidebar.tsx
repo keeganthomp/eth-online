@@ -33,6 +33,7 @@ const PurchaseButton = styled.p`
   border-radius: 14px;
   font-size: 20px;
   padding: 0.75rem 1rem;
+  transition: background 0.1s;
   &:hover {
     background: #333333;
   }

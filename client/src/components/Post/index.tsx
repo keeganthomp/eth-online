@@ -53,7 +53,7 @@ const LikeContainer = styled.div`
   justify-content: center;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
   > * {
     margin: 0 10px;
     cursor: pointer;
