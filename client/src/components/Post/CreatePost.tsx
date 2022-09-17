@@ -5,6 +5,7 @@ import web3Storage from 'lib/web3Storage';
 import { useRecoilValue } from 'recoil';
 import accountState from 'state/account';
 import { launchPostCtc } from 'lib/reach';
+import Button from 'components/Button';
 
 const Container = styled.div`
   display: flex;
@@ -13,11 +14,22 @@ const Container = styled.div`
 const TextArea = styled.textarea`
   padding: 0.5rem;
   resize: vertical;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border: none;
+  outline: none;
 `;
 const SubmitBtn = styled.button`
-  margin-top: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  background: ${(props) => props.theme.main};
+  color: white;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const CreatePost = () => {
@@ -48,7 +60,13 @@ const CreatePost = () => {
 
   return (
     <Container>
-      <TextArea rows={4} cols={30} value={message} onChange={handleMessageChange} />
+      <TextArea
+        placeholder='Write something interesting...'
+        rows={8}
+        cols={30}
+        value={message}
+        onChange={handleMessageChange}
+      />
       <SubmitBtn onClick={handlePost} disabled={isSubmitting}>
         {isSubmitting ? 'Wait...' : 'Post'}
       </SubmitBtn>

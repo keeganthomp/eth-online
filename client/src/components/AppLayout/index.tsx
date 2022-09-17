@@ -5,7 +5,7 @@ import RightSidebar from 'components/AppLayout/sidebar/RightSidebar';
 import TopBar from './TopBar';
 
 const NAVBAR_HEIGHT = '5rem';
-const SIDEBAR_WIDTH = '22rem';
+const SIDEBAR_WIDTH = '26rem';
 
 const Layout = styled.div`
   height: 100vh;
@@ -23,7 +23,7 @@ const Content = styled.div`
   padding: 1rem;
   height: 100vh;
   overflow: auto;
-  background-color: #eeeeee;
+  background-color: ${(props) => props.theme.darkBackground};
   border-radius: 5px;
 `;
 

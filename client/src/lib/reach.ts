@@ -99,6 +99,15 @@ export const getTokBalances = async (acc: any) => {
   };
 };
 
+export const truncateAddress = (address: string) => {
+  const start = address.slice(0, 4);
+  const end = address.slice(-4);
+  return `${start}...${end}`;
+};
+
+export const goViewContract = (contractAddress: string) =>
+  window.open(`${POLYGON_TESTNET_EXPLORER_BASE_URL}${contractAddress}`, '_blank');
+
 const obj = {
   stdlib: reach,
   getAccountFromCache,

@@ -3,26 +3,29 @@ import styled from 'styled-components';
 import { HiOutlineHeart } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { Message } from 'types';
-import reach, { POLYGON_TESTNET_EXPLORER_BASE_URL } from 'lib/reach';
+import reach, { POLYGON_TESTNET_EXPLORER_BASE_URL, truncateAddress } from 'lib/reach';
 import accountState from 'state/account';
 import { useRecoilValue } from 'recoil';
+import Link from 'components/Link';
 
 const CARD_HEIGHT = '15rem';
 const ICON_SIZE = 25;
 
 const Container = styled.div`
   max-height: ${CARD_HEIGHT};
-  background: white;
+  background: ${(props) => props.theme.darkestBackground};
+  color: white;
   border-radius: 5px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3rem 1fr 2.5rem;
+  grid-template-rows: 3rem 1fr 1.75rem;
+  position: relative;
 `;
 
 const Topbar = styled.div`
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
 `;
 const ProfilePicture = styled.img`
   height: 2rem;
@@ -30,28 +33,32 @@ const ProfilePicture = styled.img`
   border-radius: 50%;
   margin-right: 0.5rem;
 `;
-const ContractLink = styled.a`
-  color: blue;
-  cursor: pointer;
-`;
-
-const Content = styled.div`
-  padding: 10px;
+const Content = styled.p`
+  padding: 1.75rem 10px;
 `;
 
 const HeartIcon = styled(HiOutlineHeart)``;
+const ContractInfo = styled.p`
+  font-size: 12px;
+  position: absolute;
+  top: 3px;
+  right: 6px;
+`;
 
 const LikeContainer = styled.div`
-  border-top: 1px solid lightgray;
+  background-color: ${(props) => props.theme.red};
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
   > * {
     margin: 0 10px;
     cursor: pointer;
   }
   &:hover {
-    background-color: red;
+    opacity: 0.8;
+    overflow: hidden;
     cursor: pointer;
     ${HeartIcon} {
       color: white;
@@ -65,9 +72,6 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
 
   const goViewPost = () => navigate(`/post/${id}`);
 
-  const goViewContract = () =>
-    window.open(`${POLYGON_TESTNET_EXPLORER_BASE_URL}${contractAddress}`, '_blank');
-
   const likePost = () => {
     if (!account) return;
     reach.likePost(account, contractAddress);
@@ -75,16 +79,16 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
 
   return (
     <Container>
+      <ContractInfo>
+        <Link to={POLYGON_TESTNET_EXPLORER_BASE_URL + contractAddress}>
+          {truncateAddress(contractAddress)}
+        </Link>
+      </ContractInfo>
       <Topbar>
         <ProfilePicture src='https://picsum.photos/200' />
-        <p>{sender}</p>
+        <p>{truncateAddress(sender)}</p>
       </Topbar>
-      <Content>
-        <p>{message}</p>
-        <p>
-          contract: <ContractLink onClick={goViewContract}>{contractAddress}</ContractLink>
-        </p>
-      </Content>
+      <Content>{message}</Content>
       <LikeContainer onClick={likePost}>
         <HeartIcon size={ICON_SIZE} />
       </LikeContainer>

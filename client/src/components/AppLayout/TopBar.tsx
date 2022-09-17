@@ -1,21 +1,20 @@
 import styled from 'styled-components';
 import ConnectButton from 'components/ConnectButton';
 import accountState from 'state/account';
-import tokenState from 'state/tokens';
 import tokenBalancesState from 'state/tokenBalances';
 import { useRecoilValue } from 'recoil';
 
 const TopBarContainer = styled.div`
   grid-area: topBar;
   display: grid;
-  grid-template-columns: 22rem 1fr 22rem;
+  grid-template-columns: 26rem 1fr 26rem;
+  background: ${(props) => props.theme.darkestBackground};
 `;
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 1rem;
 `;
 const WalletContainer = styled.div`
   display: flex;
@@ -29,38 +28,46 @@ const BalanceContainer = styled.div`
 `;
 const Balance = styled.p`
   font-size: 14px;
-  font-style: italic;
+  color: white;
 `;
 const BalAmount = styled.span`
   font-weight: bold;
+  font-size: 16px;
 `;
-const TokIdContainer = styled.div`
+const TokBalContainer = styled.div`
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+const Text = styled.p`
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 22px;
 `;
 
 const TopBar = () => {
   const account = useRecoilValue(accountState);
-  const tokenIds = useRecoilValue(tokenState);
   const { likeTokenBalance } = useRecoilValue(tokenBalancesState);
   return (
     <TopBarContainer>
       <LogoContainer>
-        <p>Ixnay</p>
+        <Text>Ixnay</Text>
       </LogoContainer>
       <WalletContainer>
         <ConnectButton />
+      </WalletContainer>
+      <TokBalContainer>
         {account && (
           <BalanceContainer>
             <Balance>
-              Like tokens: <BalAmount>{likeTokenBalance}</BalAmount>
+              Like token balance: <BalAmount>{likeTokenBalance}</BalAmount>
             </Balance>
           </BalanceContainer>
         )}
-      </WalletContainer>
-      <TokIdContainer>
-        <p>Invite Token Id: {tokenIds.inviteTokenId}</p>
-        <p>Like Token Id: {tokenIds.likeTokenId}</p>
-      </TokIdContainer>
+      </TokBalContainer>
     </TopBarContainer>
   );
 };
