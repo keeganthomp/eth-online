@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { Message } from 'types';
 import reach, { POLYGON_TESTNET_EXPLORER_BASE_URL, truncateAddress } from 'lib/reach';
 import accountState from 'state/account';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Link from 'components/Link';
+import signingState from 'state/signing';
 
 const CARD_HEIGHT = '15rem';
 const ICON_SIZE = 25;
@@ -52,6 +53,7 @@ const LikeContainer = styled.div`
   justify-content: center;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
+  transition: background 0.2s;
   > * {
     margin: 0 10px;
     cursor: pointer;
@@ -68,13 +70,19 @@ const LikeContainer = styled.div`
 
 const Post = ({ sender, message, contractAddress, id }: Message) => {
   const account = useRecoilValue(accountState);
+  const setSigning = useSetRecoilState(signingState);
   const navigate = useNavigate();
 
   const goViewPost = () => navigate(`/post/${id}`);
 
-  const likePost = () => {
+  const likePost = async () => {
     if (!account) return;
-    reach.likePost(account, contractAddress);
+    try {
+      setSigning(true);
+      await reach.likePost(account, contractAddress);
+    } catch {
+      setSigning(false);
+    }
   };
 
   return (

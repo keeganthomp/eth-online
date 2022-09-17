@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from 'theme';
 
 import OnAppLoad from 'components/OnAppLoad';
+import SigningModal from 'components/SigningModal';
 
 import AppLayout from 'components/AppLayout';
 
@@ -26,6 +27,7 @@ root.render(
           </Route>
         </Routes>
       </BrowserRouter>
+      <SigningModal />
     </RecoilRoot>
   </ThemeProvider>
 );

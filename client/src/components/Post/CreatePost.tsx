@@ -2,10 +2,10 @@
 import styled from 'styled-components';
 import { useState, ChangeEvent } from 'react';
 import web3Storage from 'lib/web3Storage';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import accountState from 'state/account';
 import { launchPostCtc } from 'lib/reach';
-import Button from 'components/Button';
+import signingState from 'state/signing';
 
 const Container = styled.div`
   display: flex;
@@ -27,13 +27,21 @@ const SubmitBtn = styled.button`
   cursor: pointer;
   background: ${(props) => props.theme.main};
   color: white;
+  transition: background 0.2s;
   &:hover {
     opacity: 0.8;
+  }
+  &:disabled {
+    background: lightgray;
+    &:hover {
+      opacity: 1;
+    }
   }
 `;
 
 const CreatePost = () => {
   const account = useRecoilValue(accountState);
+  const setSigning = useSetRecoilState(signingState);
   const [message, setMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -45,6 +53,7 @@ const CreatePost = () => {
     }
     setSubmitting(true);
     try {
+      setSigning(true);
       const ctcAddress = await launchPostCtc(account);
       await web3Storage.uploadMessage({
         message,
@@ -54,6 +63,7 @@ const CreatePost = () => {
     } catch (err: any) {
       console.log('Error creating post:', err);
     } finally {
+      setSigning(false);
       setSubmitting(false);
     }
   };
@@ -67,7 +77,7 @@ const CreatePost = () => {
         value={message}
         onChange={handleMessageChange}
       />
-      <SubmitBtn onClick={handlePost} disabled={isSubmitting}>
+      <SubmitBtn onClick={handlePost} disabled={isSubmitting || !message}>
         {isSubmitting ? 'Wait...' : 'Post'}
       </SubmitBtn>
     </Container>

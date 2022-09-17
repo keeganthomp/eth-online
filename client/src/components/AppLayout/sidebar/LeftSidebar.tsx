@@ -6,7 +6,8 @@ import { MdGeneratingTokens, MdOutlineGeneratingTokens } from 'react-icons/md';
 import reach, { truncateAddress, POLYGON_TESTNET_EXPLORER_BASE_URL } from 'lib/reach';
 import Link from 'components/Link';
 import tokenBalancesState from 'state/tokenBalances';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import signingState from 'state/signing';
 
 import Sidebar from './sidebar.component';
 
@@ -49,18 +50,31 @@ const ContractInfoContainer = styled.div`
 const LeftSidebar = () => {
   const account = useRecoilValue(accountState);
   const tokenIds = useRecoilValue(tokenState);
+  const setSigningState = useSetRecoilState(signingState);
   const [tokBals, setTokBals] = useRecoilState(tokenBalancesState);
 
   const handleGetInviteToken = async () => {
     if (!account) return;
-    await reach.getInviteToken(account);
-    setTokBals({ ...tokBals, inviteTokenBalance: tokBals.inviteTokenBalance + 1 });
+    try {
+      setSigningState(true);
+      await reach.getInviteToken(account);
+      setTokBals({ ...tokBals, inviteTokenBalance: tokBals.inviteTokenBalance + 1 });
+      setSigningState(false);
+    } catch {
+      setSigningState(false);
+    }
   };
 
   const handleGetLikeTokens = async () => {
     if (!account) return;
-    await reach.getLikeTokens(account);
-    setTokBals({ ...tokBals, likeTokenBalance: tokBals.likeTokenBalance + 100 });
+    try {
+      setSigningState(true);
+      await reach.getLikeTokens(account);
+      setTokBals({ ...tokBals, likeTokenBalance: tokBals.likeTokenBalance + 100 });
+      setSigningState(false);
+    } catch {
+      setSigningState(false);
+    }
   };
 
   return (

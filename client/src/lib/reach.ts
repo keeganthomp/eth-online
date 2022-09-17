@@ -28,37 +28,53 @@ export const getTokenIds = async (): Promise<{ inviteTokenId: string; likeTokenI
 };
 
 export const launchPostCtc = async (acc: any) => {
-  const { inviteTokenId, likeTokenId } = await getTokenIds();
-  const ctc = acc.contract(postBackend);
-  await reach.withDisconnect(() =>
-    ctc.p.Creator({
-      inviteToken: inviteTokenId,
-      likeToken: likeTokenId,
-      ready: reach.disconnect
-    })
-  );
-  const ctcInfo = await ctc.getInfo();
-  return ctcInfo;
+  try {
+    const { inviteTokenId, likeTokenId } = await getTokenIds();
+    const ctc = acc.contract(postBackend);
+    await reach.withDisconnect(() =>
+      ctc.p.Creator({
+        inviteToken: inviteTokenId,
+        likeToken: likeTokenId,
+        ready: reach.disconnect
+      })
+    );
+    const ctcInfo = await ctc.getInfo();
+    return ctcInfo;
+  } catch {
+    throw new Error('Failed');
+  }
 };
 
 export const likePost = async (acc: any, ctcAddress: string) => {
   const ctc = acc.contract(postBackend, ctcAddress);
-  await ctc.a.like();
+  try {
+    await ctc.a.like();
+  } catch {
+    throw new Error('Failed');
+  }
 };
 
 export const getInviteToken = async (acc: any) => {
   const ctc = acc.contract(authBackend, REACT_APP_DISPENSER_CONTRACT);
-  const [_, areStillFree] = await ctc.v.areFreeInvitesAvailable();
-  if (areStillFree) {
-    await ctc.a.getInitialInvite();
-  } else {
-    await ctc.a.buyInviteTok();
+  try {
+    const [_, areStillFree] = await ctc.v.areFreeInvitesAvailable();
+    if (areStillFree) {
+      await ctc.a.getInitialInvite();
+    } else {
+      await ctc.a.buyInviteTok();
+    }
+  } catch {
+    throw new Error('Failed');
   }
 };
 
 export const getLikeTokens = async (acc: any) => {
-  const ctc = acc.contract(authBackend, REACT_APP_DISPENSER_CONTRACT);
-  await ctc.a.buyLikeTok();
+  try {
+    const ctc = acc.contract(authBackend, REACT_APP_DISPENSER_CONTRACT);
+    await ctc.a.buyLikeTok();
+  } catch {
+    throw new Error('Failed');
+  }
 };
 
 export const formatAccount = (acc: any) => {
