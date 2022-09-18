@@ -16,19 +16,36 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+const MessageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 const Message = styled.p`
   font-weight: bold;
-  color: white;
-  font-size: 24px;
+  font-size: 26px;
   text-align: center;
+  text-transform: uppercase;
+  color: white;
 `;
 
 function Home() {
   const { posts, fetching } = useRecoilValue(postState);
   const { inviteTokenBalance } = useRecoilValue(tokenBalancesState);
   const account = useRecoilValue(accountState);
-  if (!account) return <Message>Please connect</Message>;
-  if (account && !inviteTokenBalance) return <Message>You need an invite token</Message>;
+  if (!account)
+    return (
+      <MessageContainer>
+        <Message>Please connect</Message>
+      </MessageContainer>
+    );
+  if (account && !inviteTokenBalance)
+    return (
+      <MessageContainer>
+        <Message>Purchase invite token to view content</Message>;
+      </MessageContainer>
+    );
   if (fetching)
     return (
       <LoadingContainer>
