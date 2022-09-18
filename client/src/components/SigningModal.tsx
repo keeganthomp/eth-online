@@ -8,7 +8,7 @@ const Container = styled.div`
   margin-top: 4rem;
 `;
 const Title = styled.h2`
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: center;
 `;
 const Message = styled.p`
@@ -19,7 +19,7 @@ const ImageWrapper = styled.div`
   text-align: center;
 `;
 const Image = styled.img`
-  width: 25rem;
+  width: 30rem;
 `;
 
 const customStyles = {
