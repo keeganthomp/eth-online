@@ -87,7 +87,7 @@ const LeftSidebar = () => {
             Purchase Invite Token
           </PurchaseButton>
         )}
-        {account && tokBals.inviteTokenBalance && (
+        {account && tokBals.inviteTokenBalance > 0 && (
           <PurchaseButton style={{ marginTop: '3px' }} onClick={handleGetLikeTokens}>
             <LikeTokenIcon />
             Purchase Like Tokens
