@@ -9,6 +9,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Link from 'components/Link';
 import signingState from 'state/signing';
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 const CARD_HEIGHT = '15rem';
 const ICON_SIZE = 25;
@@ -17,7 +18,7 @@ const Container = styled.div`
   max-height: ${CARD_HEIGHT};
   background: ${(props) => props.theme.background};
   color: white;
-  border-radius: 5px;
+  border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 3rem 1fr 1.75rem;
@@ -49,6 +50,7 @@ const ContractInfo = styled.p`
 const LikeCount = styled.p`
   position: absolute;
   right: 0;
+  font-weight: bold;
 `;
 
 const LikeContainer = styled.div`
@@ -56,8 +58,8 @@ const LikeContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
   transition: opacity 0.2s;
   > * {
     margin: 0 10px;
@@ -72,8 +74,12 @@ const LikeContainer = styled.div`
     }
   }
 `;
+const MetaContainer = styled.div`
+  color: lightgray;
+  font-size: 12px;
+`;
 
-const Post = ({ sender, message, contractAddress, id }: Message) => {
+const Post = ({ sender, message, contractAddress, id, createdAt }: Message) => {
   const [fetchingLikes, setFetching] = useState(false);
   const [likes, setLikes] = useState<null | number>(null);
   const account = useRecoilValue(accountState);
@@ -99,10 +105,13 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
       setSigning(true);
       await reach.likePost(account, contractAddress);
       if (likes) setLikes(likes + 1);
+      setSigning(false);
     } catch {
       setSigning(false);
     }
   };
+
+  const howLongAgo = moment(createdAt).startOf('hour').fromNow();
 
   return (
     <Container>
@@ -113,7 +122,10 @@ const Post = ({ sender, message, contractAddress, id }: Message) => {
       </ContractInfo>
       <Topbar>
         <ProfilePicture src='https://picsum.photos/200' />
-        <p>{truncateAddress(sender)}</p>
+        <MetaContainer>
+          <p>@{truncateAddress(sender)}</p>
+          <p>{howLongAgo}</p>
+        </MetaContainer>
       </Topbar>
       <Content>{message}</Content>
       <LikeContainer onClick={likePost}>

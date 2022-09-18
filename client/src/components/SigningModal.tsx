@@ -10,9 +10,11 @@ const Container = styled.div`
 const Title = styled.h2`
   margin-bottom: 3rem;
   text-align: center;
+  color: ${(props) => props.theme.background};
 `;
 const Message = styled.p`
   text-align: center;
+  color: ${(props) => props.theme.background};
 `;
 
 const ImageWrapper = styled.div`
@@ -42,7 +44,7 @@ const customStyles = {
 const SigningModal = () => {
   const isSigning = useRecoilValue(signingState);
   return (
-    <ReactModal style={customStyles} isOpen={isSigning}>
+    <ReactModal ariaHideApp={false} style={customStyles} isOpen={isSigning}>
       <Container>
         <Title>Please Complete Required Signings</Title>
         <ImageWrapper>
