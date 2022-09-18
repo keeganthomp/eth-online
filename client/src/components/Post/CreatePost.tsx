@@ -25,9 +25,11 @@ const SubmitBtn = styled.button`
   border-bottom-left-radius: 5px;
   border: none;
   cursor: pointer;
-  background: ${(props) => props.theme.main};
+  background: ${(props) => props.theme.accent};
   color: white;
   transition: background 0.2s;
+  font-weight: bold;
+  text-transform: uppercase;
   &:hover {
     opacity: 0.8;
   }

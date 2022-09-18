@@ -10,6 +10,6 @@ export default createGlobalStyle`
     }
     #root{
         margin:0 auto;
-        background: ${(props) => props.theme.darkestBackground}
+        background: ${(props) => props.theme.background}
     }
  `;

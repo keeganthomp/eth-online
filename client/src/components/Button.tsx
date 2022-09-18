@@ -8,6 +8,8 @@ const StyledBtn = styled.button`
   cursor: pointer;
   background: ${(props) => props.theme.main};
   color: white;
+  font-weight: bold;
+  text-transform: uppercase;
   &:hover {
     opacity: 0.8;
   }

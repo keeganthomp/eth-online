@@ -1,9 +1,9 @@
 const theme = {
-  darkestBackground: '#161616',
-  darkBackground: '#282828',
+  background: '#161616',
+  backgroundAlt: '#202020',
   main: '#ffa6c9',
-  link: '#ADD8E6',
-  red: '#FFB6C1'
+  accent: '#066255',
+  link: '#039f9b'
 };
 
 export default theme;

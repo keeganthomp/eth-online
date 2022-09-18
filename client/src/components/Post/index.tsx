@@ -15,7 +15,7 @@ const ICON_SIZE = 25;
 
 const Container = styled.div`
   max-height: ${CARD_HEIGHT};
-  background: ${(props) => props.theme.darkestBackground};
+  background: ${(props) => props.theme.background};
   color: white;
   border-radius: 5px;
   display: grid;
@@ -52,7 +52,7 @@ const LikeCount = styled.p`
 `;
 
 const LikeContainer = styled.div`
-  background-color: ${(props) => props.theme.red};
+  background-color: ${(props) => props.theme.main};
   display: flex;
   align-items: center;
   justify-content: center;

@@ -8,7 +8,7 @@ const Sidebar = styled.div<SidebarProps>`
   grid-area: ${(props) => props.gridArea};
   height: 100vh;
   padding: 0.75rem;
-  background: ${(props) => props.theme.darkestBackground};
+  background: ${(props) => props.theme.background};
 `;
 
 export default Sidebar;

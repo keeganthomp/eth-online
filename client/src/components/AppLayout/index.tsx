@@ -23,8 +23,9 @@ const Content = styled.div`
   padding: 1rem;
   height: 100vh;
   overflow: auto;
-  background-color: ${(props) => props.theme.darkBackground};
+  background-color: ${(props) => props.theme.backgroundAlt};
   border-radius: 5px;
+  border: 1px solid #404040;
 `;
 
 const AppLayout = () => {

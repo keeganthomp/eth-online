@@ -8,7 +8,7 @@ const TopBarContainer = styled.div`
   grid-area: topBar;
   display: grid;
   grid-template-columns: 26rem 1fr 26rem;
-  background: ${(props) => props.theme.darkestBackground};
+  background: ${(props) => props.theme.background};
 `;
 const LogoContainer = styled.div`
   display: flex;
