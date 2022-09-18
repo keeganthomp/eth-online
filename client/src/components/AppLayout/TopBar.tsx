@@ -50,7 +50,7 @@ const Text = styled.p`
 
 const TopBar = () => {
   const account = useRecoilValue(accountState);
-  const { likeTokenBalance } = useRecoilValue(tokenBalancesState);
+  const { likeTokenBalance, inviteTokenBalance } = useRecoilValue(tokenBalancesState);
   return (
     <TopBarContainer>
       <LogoContainer>
@@ -60,7 +60,7 @@ const TopBar = () => {
         <ConnectButton />
       </WalletContainer>
       <TokBalContainer>
-        {account && (
+        {account && inviteTokenBalance > 0 && (
           <BalanceContainer>
             <Balance>
               Like token balance: <BalAmount>{likeTokenBalance}</BalAmount>
