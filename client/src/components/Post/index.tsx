@@ -111,7 +111,7 @@ const Post = ({ sender, message, contractAddress, id, createdAt }: Message) => {
     }
   };
 
-  const howLongAgo = moment(createdAt).startOf('hour').fromNow();
+  const howLongAgo = moment(new Date(createdAt)).startOf('hour').fromNow();
 
   return (
     <Container>

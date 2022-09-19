@@ -53,21 +53,22 @@ const CreatePost = () => {
       console.log('content missing. unable to post');
       return;
     }
-    setSubmitting(true);
-    try {
-      setSigning(true);
-      const ctcAddress = await launchPostCtc(account);
-      await web3Storage.uploadMessage({
-        message,
-        sender: account.address,
-        contractAddress: ctcAddress
-      });
-    } catch (err: any) {
-      console.log('Error creating post:', err);
-    } finally {
-      setSigning(false);
-      setSubmitting(false);
-    }
+    setSigning(true);
+    setTimeout(async () => {
+      try {
+        const ctcAddress = await launchPostCtc(account);
+        await web3Storage.uploadMessage({
+          message,
+          sender: account.address,
+          contractAddress: ctcAddress
+        });
+        setSigning(false);
+      } catch (err: any) {
+        setSigning(false);
+      } finally {
+        setSubmitting(false);
+      }
+    }, 100);
   };
 
   return (

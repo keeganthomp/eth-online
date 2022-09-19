@@ -42,7 +42,8 @@ export async function getMessageMetadata(cid: CIDString) {
 }
 
 async function listContent(): Promise<any> {
-  const contents = await storage.list();
+  const s = new Web3Storage({ token: API_TOK });
+  const contents = await s.list();
   return contents;
 }
 

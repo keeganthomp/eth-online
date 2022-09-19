@@ -19,6 +19,7 @@ root.render(
     <RecoilRoot>
       <OnAppLoad />
       <GlobalStyles />
+      <SigningModal />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<AppLayout />}>
@@ -27,7 +28,6 @@ root.render(
           </Route>
         </Routes>
       </BrowserRouter>
-      <SigningModal />
     </RecoilRoot>
   </ThemeProvider>
 );

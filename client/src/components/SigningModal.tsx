@@ -43,8 +43,9 @@ const customStyles = {
 
 const SigningModal = () => {
   const isSigning = useRecoilValue(signingState);
+  console.log('isSinging', isSigning);
   return (
-    <ReactModal ariaHideApp={false} style={customStyles} isOpen={isSigning}>
+    <ReactModal style={customStyles} isOpen={isSigning}>
       <Container>
         <Title>Please Complete Required Signings</Title>
         <ImageWrapper>

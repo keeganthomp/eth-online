@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import styled from 'styled-components';
 import Post from 'components/Post';
 import accountState from 'state/account';
@@ -6,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { InfinitySpin } from 'react-loader-spinner';
 import useFetchMessages from 'hooks/useFetchMessages';
 import { useEffect, useState } from 'react';
+import { Message as MessageType } from 'types';
 
 const Container = styled.div`
   display: grid;
@@ -65,12 +67,15 @@ function Home() {
         <InfinitySpin color='#fff' />
       </LoadingContainer>
     );
+  const sortedPosts = posts.sort((a: MessageType, b: MessageType) =>
+    b.createdAt.localeCompare(a.createdAt)
+  );
   return (
     <Container>
       <button type='button' onClick={fetchMessages}>
         Refresh
       </button>
-      {posts.map((post, i) => (
+      {sortedPosts.map((post, i) => (
         <Post key={i} {...post} />
       ))}
     </Container>
