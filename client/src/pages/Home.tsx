@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import Post from 'components/Post';
-import postState from 'state/post';
 import accountState from 'state/account';
 import tokenBalancesState from 'state/tokenBalances';
 import { useRecoilValue } from 'recoil';
 import { InfinitySpin } from 'react-loader-spinner';
+import useFetchMessages from 'hooks/useFetchMessages';
+import { useEffect, useState } from 'react';
 
 const Container = styled.div`
   display: grid;
@@ -31,9 +32,21 @@ const Message = styled.p`
 `;
 
 function Home() {
-  const { posts, fetching } = useRecoilValue(postState);
+  const { fetchMessages, isFetching } = useFetchMessages();
   const { inviteTokenBalance } = useRecoilValue(tokenBalancesState);
   const account = useRecoilValue(accountState);
+  const [posts, setPosts] = useState<any[]>([]);
+
+  const asyncFetch = async () => {
+    if (!account) return;
+    const postsFromIpfs = await fetchMessages();
+    setPosts(postsFromIpfs || []);
+  };
+
+  useEffect(() => {
+    asyncFetch();
+  }, [account]);
+
   if (!account)
     return (
       <MessageContainer>
@@ -46,7 +59,7 @@ function Home() {
         <Message>Purchase invite token to view content</Message>;
       </MessageContainer>
     );
-  if (fetching)
+  if (isFetching)
     return (
       <LoadingContainer>
         <InfinitySpin color='#fff' />
@@ -54,6 +67,9 @@ function Home() {
     );
   return (
     <Container>
+      <button type='button' onClick={fetchMessages}>
+        Refresh
+      </button>
       {posts.map((post, i) => (
         <Post key={i} {...post} />
       ))}

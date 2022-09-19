@@ -22,7 +22,6 @@ const ConnectButton = () => {
     if (account) return;
     try {
       setIsGettingAccount(true);
-      // TODO check for invite token in wallet
       const acc = await reach.stdlib.getDefaultAccount();
       const accForState = reach.formatAccount(acc);
       const tokBalances = await reach.getTokBalances(acc);
