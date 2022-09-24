@@ -96,7 +96,7 @@ const Post = ({ sender, message, contractAddress, id, createdAt }: Message) => {
   };
 
   useEffect(() => {
-    // asyncFetchLikes();
+    asyncFetchLikes();
   }, []);
 
   const likePost = async () => {
